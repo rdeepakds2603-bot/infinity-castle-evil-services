@@ -281,26 +281,47 @@ export const TransformationVideoSection: React.FC<TransformationVideoSectionProp
                 </div>
               </div>
             ) : (
-              /* Idle Prompt on Screen */
-              <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center p-6 text-center space-y-4">
-                <div className="w-16 h-16 rounded-full bg-red-950/90 border-2 border-red-500 flex items-center justify-center shadow-[0_0_30px_rgba(220,38,38,0.7)]">
-                  <Play className="w-6 h-6 text-amber-300 translate-x-0.5" />
+              /* Idle — character POSE always visible, text floats on top */
+              <div className="absolute inset-0 flex flex-col items-center justify-end pointer-events-none">
+                {/* Subtle top vignette only — pose remains fully visible */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/80 pointer-events-none" />
+
+                {/* Character name watermark top-left */}
+                <div className="absolute top-4 left-4 pointer-events-none">
+                  <span className="font-cinzel text-[10px] font-bold tracking-[0.3em] text-amber-400/80 uppercase">
+                    {character.name} — FINAL FORM
+                  </span>
                 </div>
-                <div>
-                  <h4 className="font-cinzel text-lg sm:text-xl font-black text-white tracking-wider">
-                    CINEMATIC FINAL FORM TRANSFORMATION (25s)
-                  </h4>
-                  <p className="text-xs text-neutral-400 font-cinzel max-w-md mx-auto mt-1">
+
+                {/* Pulsing aura ring in center */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div
+                    className="w-32 h-32 rounded-full opacity-25 animate-ping"
+                    style={{ background: `radial-gradient(circle, ${character.themeColor.glow}, transparent 70%)` }}
+                  />
+                </div>
+
+                {/* Bottom overlay with title + button */}
+                <div className="relative z-10 w-full px-6 pb-6 pt-8 bg-gradient-to-t from-black/90 via-black/60 to-transparent text-center space-y-3 pointer-events-auto">
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-red-950/90 border border-red-500 flex items-center justify-center shadow-[0_0_18px_rgba(220,38,38,0.8)]">
+                      <Play className="w-4 h-4 text-amber-300 translate-x-0.5" />
+                    </div>
+                    <h4 className="font-cinzel text-base sm:text-lg font-black text-white tracking-wider">
+                      CINEMATIC FINAL FORM TRANSFORMATION (25s)
+                    </h4>
+                  </div>
+                  <p className="text-[11px] text-neutral-300 font-cinzel max-w-md mx-auto">
                     Trigger the full anime transformation scene with dynamic lighting, camera zooms, and energy aura.
                   </p>
+                  <button
+                    onClick={startSimulation}
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-red-700 to-red-900 hover:from-red-600 hover:to-red-800 text-white font-cinzel text-xs font-bold tracking-[0.2em] border border-red-400 shadow-[0_0_20px_rgba(220,38,38,0.6)] transition-all cursor-pointer flex items-center gap-2 mx-auto"
+                  >
+                    <Sparkles className="w-4 h-4 text-amber-300" />
+                    <span>PLAY TRANSFORMATION SCENE</span>
+                  </button>
                 </div>
-                <button
-                  onClick={startSimulation}
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-red-700 to-red-900 hover:from-red-600 hover:to-red-800 text-white font-cinzel text-xs font-bold tracking-[0.2em] border border-red-400 shadow-[0_0_20px_rgba(220,38,38,0.6)] transition-all cursor-pointer flex items-center gap-2"
-                >
-                  <Sparkles className="w-4 h-4 text-amber-300" />
-                  <span>PLAY TRANSFORMATION SCENE</span>
-                </button>
               </div>
             )}
           </div>
