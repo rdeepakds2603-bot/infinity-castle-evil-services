@@ -88,6 +88,7 @@ export interface CharacterData {
     imageSrc: string;
     bannerSrc: string;
     chamberBg: string;
+    videoSrc?: string;
   };
 }
 

@@ -112,17 +112,32 @@ export const CharacterDetailView: React.FC<CharacterDetailViewProps> = ({
                 : 'border-neutral-800 bg-black/90'
             }`}
           >
-            {/* Real Uploaded Character Artwork with Cinematic Glow */}
+            {/* Real Uploaded Character Artwork or Video with Cinematic Glow */}
             <div className="h-[460px] w-full relative overflow-hidden">
-              <img
-                src={character.visualAsset.imageSrc}
-                alt={character.name}
-                className={`w-full h-full object-cover object-top transition-all duration-700 ${
-                  isAttacking
-                    ? 'scale-110 brightness-125 contrast-125 saturate-150'
-                    : 'scale-100 brightness-95 contrast-110'
-                }`}
-              />
+              {character.visualAsset.videoSrc ? (
+                <video
+                  src={character.visualAsset.videoSrc}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className={`w-full h-full object-cover object-center transition-all duration-700 ${
+                    isAttacking
+                      ? 'scale-110 brightness-125 contrast-125 saturate-150'
+                      : 'scale-100 brightness-95 contrast-110'
+                  }`}
+                />
+              ) : (
+                <img
+                  src={character.visualAsset.imageSrc}
+                  alt={character.name}
+                  className={`w-full h-full object-cover object-top transition-all duration-700 ${
+                    isAttacking
+                      ? 'scale-110 brightness-125 contrast-125 saturate-150'
+                      : 'scale-100 brightness-95 contrast-110'
+                  }`}
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent pointer-events-none" />
 
               {/* Threat Badge */}

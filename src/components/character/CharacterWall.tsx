@@ -179,13 +179,20 @@ export const CharacterWall: React.FC<CharacterWallProps> = ({
               </div>
             </div>
 
-            {/* Muzan Portrait Preview using Real Uploaded Image */}
-            <div className="w-64 sm:w-72 h-80 shrink-0 rounded-2xl overflow-hidden border-2 border-red-500/80 shadow-[0_0_35px_rgba(220,38,38,0.7)]">
-              <img
-                src={muzan.visualAsset.imageSrc}
-                alt={muzan.name}
-                className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700 brightness-90 group-hover:brightness-110"
+            {/* Muzan Video Preview using Uploaded WhatsApp Video */}
+            <div className="w-64 sm:w-72 h-80 shrink-0 rounded-2xl overflow-hidden border-2 border-red-500/80 shadow-[0_0_35px_rgba(220,38,38,0.7)] relative group">
+              <video
+                src={muzan.visualAsset.videoSrc || '/assets/characters/muzan.mp4'}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 brightness-95 group-hover:brightness-110"
               />
+              <div className="absolute top-2.5 left-2.5 z-10 px-2 py-0.5 rounded-full bg-red-950/90 border border-red-500 text-[9px] font-cinzel font-bold text-amber-300 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
+                <span>VIDEO PREVIEW</span>
+              </div>
             </div>
           </div>
         </div>

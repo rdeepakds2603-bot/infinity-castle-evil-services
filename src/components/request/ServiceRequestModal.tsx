@@ -109,11 +109,22 @@ export const ServiceRequestModal: React.FC<ServiceRequestModalProps> = ({
             <div className="p-4 rounded-2xl bg-black border border-red-900/60 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-20 rounded-xl bg-neutral-900 border border-neutral-700 overflow-hidden flex items-center justify-center shrink-0">
-                  <img
-                    src={currentCharacter.visualAsset.imageSrc}
-                    alt={currentCharacter.name}
-                    className="w-full h-full object-cover object-top"
-                  />
+                  {currentCharacter.visualAsset.videoSrc ? (
+                    <video
+                      src={currentCharacter.visualAsset.videoSrc}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover object-center"
+                    />
+                  ) : (
+                    <img
+                      src={currentCharacter.visualAsset.imageSrc}
+                      alt={currentCharacter.name}
+                      className="w-full h-full object-cover object-top"
+                    />
+                  )}
                 </div>
                 <div>
                   <span className="text-[10px] font-cinzel text-neutral-500 uppercase tracking-widest block">

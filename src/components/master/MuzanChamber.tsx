@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CHARACTERS } from '../../data/charactersData';
 import { SignatureEffectsCanvas } from '../character/SignatureEffectsCanvas';
 import { soundEngine } from '../audio/SoundEngine';
@@ -8,6 +8,8 @@ import {
   CheckCircle2,
   RotateCcw,
   Crown,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -32,6 +34,8 @@ export const MuzanChamber: React.FC<MuzanChamberProps> = ({
   ]);
   const [isSealingContract, setIsSealingContract] = useState(false);
   const [isContractFinalized, setIsContractFinalized] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     // Gradual dramatic reveal sequence
@@ -106,10 +110,10 @@ export const MuzanChamber: React.FC<MuzanChamberProps> = ({
             <span>THE SUPREME PROGENITOR CONCLAVE</span>
           </div>
 
-          {/* Gradual Character Real Uploaded Portrait */}
+          {/* Gradual Character Real Uploaded Video */}
           <div className="my-6 h-80 sm:h-96 w-full flex items-center justify-center relative">
             <div
-              className={`w-full h-full max-w-md rounded-3xl overflow-hidden border-2 border-red-600/80 shadow-[0_0_50px_rgba(220,38,38,0.7)] transition-all duration-1000 ${
+              className={`w-full h-full max-w-md rounded-3xl overflow-hidden border-2 border-red-600/80 shadow-[0_0_50px_rgba(220,38,38,0.7)] relative group transition-all duration-1000 ${
                 revealStage === 0
                   ? 'opacity-0 scale-90 blur-xl'
                   : revealStage === 1
@@ -119,11 +123,42 @@ export const MuzanChamber: React.FC<MuzanChamberProps> = ({
                   : 'opacity-100 scale-105 blur-none'
               }`}
             >
-              <img
-                src={muzanData.visualAsset.imageSrc}
-                alt="Muzan Kibutsuji"
-                className="w-full h-full object-cover object-top brightness-90 hover:brightness-110 transition-all duration-700"
+              <video
+                ref={videoRef}
+                src={muzanData.visualAsset.videoSrc || '/assets/characters/muzan.mp4'}
+                autoPlay
+                loop
+                muted={isMuted}
+                playsInline
+                className="w-full h-full object-cover object-center brightness-95 group-hover:brightness-110 transition-all duration-700"
               />
+
+              {/* Audio and Live Feed Overlays */}
+              <div className="absolute bottom-3 right-3 z-20 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsMuted(!isMuted);
+                  }}
+                  className="px-2.5 py-1.5 rounded-lg bg-black/85 hover:bg-neutral-900 border border-red-500/60 text-amber-300 text-[10px] font-cinzel font-bold flex items-center gap-1.5 cursor-pointer backdrop-blur-md transition-all shadow-lg"
+                  title={isMuted ? 'Unmute Demon Video' : 'Mute Video'}
+                >
+                  {isMuted ? (
+                    <VolumeX className="w-3.5 h-3.5 text-red-400" />
+                  ) : (
+                    <Volume2 className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+                  )}
+                  <span>{isMuted ? 'UNMUTE' : 'AUDIO ON'}</span>
+                </button>
+              </div>
+
+              <div className="absolute top-3 left-3 z-20 pointer-events-none">
+                <span className="px-2.5 py-1 rounded-full bg-red-950/90 border border-red-500 text-[10px] font-cinzel font-bold text-amber-300 flex items-center gap-1.5 shadow-md">
+                  <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                  <span>PROGENITOR LIVE FEED</span>
+                </span>
+              </div>
             </div>
           </div>
 

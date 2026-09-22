@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { CharacterData } from '../../types';
 import { soundEngine } from '../audio/SoundEngine';
 import {
@@ -20,8 +20,10 @@ interface TransformationVideoSectionProps {
 export const TransformationVideoSection: React.FC<TransformationVideoSectionProps> = ({
   character,
 }) => {
-  const [uploadedVideoUrl, setUploadedVideoUrl] = useState<string | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [activeVideoUrl, setActiveVideoUrl] = useState<string | null>(
+    character.visualAsset.videoSrc || null
+  );
+  const [isPlaying, setIsPlaying] = useState(true);
   const [isSimulating, setIsSimulating] = useState(false);
   const [simSecond, setSimSecond] = useState(0);
   const [isLooping, setIsLooping] = useState(true);
@@ -31,15 +33,16 @@ export const TransformationVideoSection: React.FC<TransformationVideoSectionProp
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const simTimerRef = useRef<number | null>(null);
 
+  useEffect(() => {
+    setActiveVideoUrl(character.visualAsset.videoSrc || null);
+  }, [character]);
+
   // Handle local video file upload (MP4/WebM)
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (uploadedVideoUrl) {
-        URL.revokeObjectURL(uploadedVideoUrl);
-      }
       const url = URL.createObjectURL(file);
-      setUploadedVideoUrl(url);
+      setActiveVideoUrl(url);
       setIsPlaying(true);
       soundEngine.playTaikoDrum(55, 1.2);
     }
@@ -147,12 +150,12 @@ export const TransformationVideoSection: React.FC<TransformationVideoSectionProp
 
       {/* Main Video / Interactive Animation Screen */}
       <div className="relative rounded-2xl overflow-hidden bg-neutral-950 border-2 border-red-900/80 aspect-video flex items-center justify-center group shadow-[0_0_40px_rgba(0,0,0,0.9)]">
-        {/* If user uploaded a real MP4/WebM video */}
-        {uploadedVideoUrl ? (
+        {/* If character has videoSrc or user uploaded a real MP4/WebM video */}
+        {activeVideoUrl ? (
           <div className="relative w-full h-full">
             <video
               ref={videoRef}
-              src={uploadedVideoUrl}
+              src={activeVideoUrl}
               autoPlay
               loop={isLooping}
               muted={videoMuted}
@@ -205,7 +208,9 @@ export const TransformationVideoSection: React.FC<TransformationVideoSectionProp
                 </button>
               </div>
               <span className="text-xs font-cinzel text-neutral-300 tracking-wider">
-                CUSTOM USER REFERENCE CLIP ACTIVE
+                {character.visualAsset.videoSrc === activeVideoUrl
+                  ? `${character.name.toUpperCase()} FINAL FORM TRANSFORMATION VIDEO`
+                  : 'CUSTOM USER REFERENCE CLIP ACTIVE'}
               </span>
             </div>
           </div>

@@ -915,6 +915,7 @@ export const CHARACTERS: CharacterData[] = [
     visualAsset: {
       imageSrc: '/assets/characters/muzan.jpg',
       bannerSrc: '/assets/characters/muzan.jpg',
+      videoSrc: '/assets/characters/muzan.mp4',
       chamberBg: 'bg-gradient-to-b from-red-950/90 via-black to-black',
     }
   }
